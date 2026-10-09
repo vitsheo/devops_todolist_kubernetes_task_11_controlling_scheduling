@@ -1,29 +1,27 @@
-# Instructions for Deploying and Validating Advanced Scheduling Rules
+# Deployment and Validation Instructions for Advanced Scheduling
 
 ## 1. Automated Deployment
-Execute the bootstrap script from the root directory to initiate cluster scaling and deployments:
+Launch the setup using the complete automated deployment script from the root folder:
 ```bash
 ./bootstrap.sh
 ```
 
----
+## 2. Infrastructure Validation
 
-## 2. Advanced Scheduling Validation
-
-### Step 2.1: Verify Node Taints Presence
-Ensure that worker nodes labeled with app=mysql successfully received the protection taint:
+### Step 2.1: Verify Node Taints Management
+Confirm that worker nodes matching the app=mysql specification received the scheduling block:
 ```bash
 kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints
 ```
 
-### Step 2.2: Verify MySQL StatefulSet Node Distribution
-Validate that MySQL pods scaled properly and settled exclusively on the matching database nodes:
+### Step 2.2: Verify MySQL StatefulSet (mysql Namespace)
+Verify database distribution across protected nodes:
 ```bash
 kubectl get pods -n mysql -o wide
 ```
 
-### Step 2.3: Verify Deployment Anti-Affinity Rule
-Check the distribution of the application pods to confirm they do not overlap on the same host system:
+### Step 2.3: Verify ToDo Application Deployment (mateapp Namespace)
+Verify application multi-pod high-availability layout:
 ```bash
 kubectl get pods -n mateapp -l app=todolist -o wide
 ```
